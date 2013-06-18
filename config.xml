@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns       = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+
+        id          = "com.adobe.woodward.mustangapp"
+        version     = "1.0.0">
+            
+    <!-- App Name -->
+    <name>Restomod!</name>
+
+    <!-- App Description  -->
+    <description>
+        Take a look at Don's Mustang Restomod!
+    </description>
+
+    <author>
+        Don Woodward 
+    </author>
+
+    <!-- phonegap version -->
+    <preference name="phonegap-version" value="2.3.0" />
+            
+    <!-- general preferences -->
+    <!-- <preference name="orientation" value="landscape" /> -->
+    <preference name="fullscreen" value="true" />
+            
+    <!-- iOS specific preferences -->
+    <preference name="webviewbounce" value="false" />
+    <preference name="detect-data-types" value="false" />
+    <preference name="exit-on-suspend" value="true" />
+    <preference name="show-splash-screen-spinner" value="false" />
+    <preference name="auto-hide-splash-screen" value="false" />
+            
+    <!-- icon and splash screen -->
+    <icon src="icon.png" />
+    <gap:splash src="splash.png" />
+
+    <!-- Disable all app permissions except the INTERNET permission, which PhoneGap requires. -->
+    <preference name="permissions" value="none" />
+    
+    <!-- to enable individual permissions use the following:
+        <feature name="http://api.phonegap.com/1.0/battery"/>
+        <feature name="http://api.phonegap.com/1.0/camera"/>
+        <feature name="http://api.phonegap.com/1.0/contacts"/>
+        <feature name="http://api.phonegap.com/1.0/file"/>
+        <feature name="http://api.phonegap.com/1.0/geolocation"/>
+        <feature name="http://api.phonegap.com/1.0/media"/>
+        <feature name="http://api.phonegap.com/1.0/network"/>
+        <feature name="http://api.phonegap.com/1.0/notification"/>
+    -->
+    
+    <plugin name="SplashScreen" name="CDWSplashScreen" />
+
+</widget>

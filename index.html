@@ -1,0 +1,199 @@
+<!--
+
+deviceorientation - alpha, beta and gamma tilt
+device motion - rate of change of the movement, acceleration
+compassneedscalibration - 
+
+static application - measure the angles and make a one-off calc - (e.g. map, compass)
+interactive app - capture the movement and do something with it dynamically
+
+deviceorientation
+beta is pitch, alpha is compass direction, bank or roll is gamma
+
+alpha is direction, beta is pitch, gamma is bank or roll
+github.com/richtr/Marine-Compass - example with smoother movement through mathematical damping
+
+devicemotion
+rotationRate
+acceleraiton
+accelerationIncludingGravity
+interval - ms interval of hardware sampling
+window.addEventListerner('devicemotion', function (e) { })
+github.com/luzc
+
+-->
+
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-default, user-scalable=no" />
+        <script type="text/javascript" charset="utf-8" src="cordova-2.3.0.js"></script>
+        <script type="text/javascript"> 
+            theimage = new Array();           
+             
+            // The dimensions of ALL the images should be the same or some of them may look stretched or reduced in Netscape 4.
+            // Format: theimage[...]=[image URL, link URL, name/description]
+            theimage[0]=["images/sIMG_5350.jpg", "", "Mustang goes in for Automatic to Standard Transmission Conversion - Stripped on Day 1.<br><br>"];
+            theimage[1]=["images/sIMG_5351.jpg", "", "Ooohh.  Rusty front calipers, original stock springs and shocks, blown out control arm bushings...  What to do?<br><br>"];
+            theimage[2]=["images/sIMG_5355.jpg", "", "Rear Axles removed for installation of 3.73:1 Ford Racing Traction-Lok Differential.<br><br>"];
+            theimage[3]=["images/sIMG_5356.jpg", "", "Axle Housing ready for new diff.  Drum brakes marginal.<br><br>"];
+            theimage[4]=["images/sIMG_5357.jpg", "", "Car looks happy up on the lift.<br><br>"];
+            theimage[5]=["images/sIMG_5358.jpg", "", "Ford Racing T5Z Manual Transmission is installed.<br><br>"];
+            theimage[6]=["images/sIMG_5382.jpg", "", "Rear Suspension Upgrade: J&M Tubular Lower Control Arms, Ford Racing Upper Control Arms,<br>Tokico Blue Shocks, and Ford Racing Springs."];
+            theimage[7]=["images/sIMG_5383.jpg", "", "Front Suspension Upgrade: Ford Racing Control Arms, Inner and Outer Tie Rod Ends,<br>Sway Bar End Links, Tokico Blue Shocks, and Ford Racing Springs."];
+            theimage[8]=["images/sIMG_5385.jpg", "", "Close up of front control arm, tie rod end and linkage showing good bushings and seals.<br><br>"];
+            theimage[9]=["images/sIMG_5386.jpg", "", "Other side of the front suspension shows mirrored upgraded parts.<br>Are those upgraded front disc brakes too?  Oh my!"];
+            theimage[10]=["images/sIMG_5391.jpg", "", "Rear disc brake upgrade is in.  No more drums.<br><br>"];
+            theimage[11]=["images/sIMG_5392.jpg", "", "Close of up the front disc brake upgrade - no more rusty calipers.<br>Note the J&M Braided Steel brake lines with OEM fit."];
+            theimage[12]=["images/sIMG_5393.jpg", "", "Front disc brake on the other side.<br><br>"];
+            theimage[13]=["images/sIMG_5394.jpg", "", "Fuel lines were rusted, necessitating replacement.<br><br>"];
+            theimage[14]=["images/sIMG_5395.jpg", "", "Another view of the new fuel lines.<br>Note nondescript but very cool upgraded Ford Racing Balanced Aluminum Driveshaft."];
+            theimage[15]=["images/sIMG_5396.jpg", "", "Differential cover in place - new gears safely ensconsed inside.<br>Note fancy coiled brake lines (and sweet Corvette in the background)."];
+            theimage[16]=["images/sIMG_5451.jpg", "", "Welded subframe connectors turn the Fox-Body Convertible from a Flexi-Flyer into a Rigid-Racer.<br><br>"];
+            theimage[17]=["images/sIMG_5452.jpg", "", "A Four-Point K-Frame Brace rounds out the chassis stiffening.<br>The old-rusted factory X-Frame Stabilizer Rods are replaced with OEM new."];
+            theimage[18]=["images/sIMG_5447.jpg", "", "Now let's put a stop to that under-body surface rust.<br><br>"];
+            theimage[19]=["images/sIMG_5457.jpg", "", "The undercoating goes on nice and easy.<br><br>"];
+            theimage[20]=["images/sIMG_5466.jpg", "", "Not only is further rust prevented, but it looks nice too.<br><br>"];
+            theimage[21]=["images/sIMG_5465.jpg", "", "Ford Racing Aluminum Drive Shaft is polished.<br><br>"];
+            theimage[22]=["images/sIMG_5430.jpg", "", "First view of the new Pro 5.0 Shifter with Mach 1 Leather Boot and Shifter Knob.<br><br>"];
+            theimage[23]=["images/sIMG_5431.jpg", "", "Interior goes back in - carpets and floor mats received professional cleaning.<br><br>"];
+            theimage[24]=["images/sIMG_5432.jpg", "", "New Extended Seat Tracks provide extra 3 inches of leg room.<br><br>"];
+            theimage[25]=["images/sIMG_5433.jpg", "", "A view of the shifter with boot removed for shifter adjustment.<br><br>"];
+            theimage[26]=["images/sIMG_5434.jpg", "", "Close up of shifter - Radio and EQ were completely disassembled, cleaned and reassembled.<br>Console was cleaned with toothbrush and mild soapy solution.<br>"];
+            theimage[27]=["images/sIMG_5445.jpg", "", "Vehicle is ready to go out for wheel alignment.<br><br>"];
+            theimage[28]=["images/sIMG_5446.jpg", "", "Another view of her aggressive posture.<br><br>"];
+                         
+            ///// Plugin variables  
+            playspeed=3000;// The playspeed determines the delay for the "Play" button in ms
+            //#####
+            //key that holds where in the array currently are
+            i=0;
+            
+            document.addEventListener("deviceready", onDeviceReady, false);
+
+            // Cordova is ready
+            function onDeviceReady() {
+                // hide the splash screen after a bit
+                setTimeout(function() { navigator.splashscreen.hide(); }, 2000);
+            }
+             
+            window.addEventListener("orientationchange", onOrientationChange, false);
+            
+            function onOrientationChange() {
+                SetText();
+            }
+
+            //###########################################
+            window.onload=function(){
+             
+                //preload images into browser
+                preloadSlide();
+             
+                //set the first slide
+                SetSlide(0);
+                
+            }
+                
+            function SetText() {
+                // get the font size to use based on the orientation
+                if (window.orientation == 0 || window.orientation == 180) fontSize = 3;
+                else fontSize = 1;
+
+                //if they want name of current slide
+                document.getElementById('slidebox').innerHTML="<font size="+fontSize+">"+theimage[i][2] + "</font>";
+             
+                //if they want current slide number and total
+                document.getElementById('slidecount').innerHTML= "<font size="+fontSize+">"+"Image "+(i+1)+" of "+theimage.length + "</font>";
+            }
+            
+            //###########################################
+            function SetSlide(num) {
+                //too big
+                i=num%theimage.length;
+                //too small
+                if(i<0)i=theimage.length-1;
+             
+                //switch the image
+                document.images.imgslide.src=theimage[i][0];
+                
+                // switch the texst
+                SetText();
+            } 
+             
+            //###########################################
+            function PlaySlide() {
+                if (!window.playing) {
+                    PlayingSlide(i+1);
+                    if(document.slideshow.play){
+                        document.slideshow.play.value="   Stop   ";
+                    }
+                }
+                else {
+                    playing=clearTimeout(playing);
+                    if(document.slideshow.play){
+                        document.slideshow.play.value="   Play   ";
+                    }
+                }
+                // if you have to change the image for the "playing" slide
+                if(document.images.imgPlay){
+                    setTimeout('document.images.imgPlay.src="'+imgStop+'"',1);
+                    imgStop=document.images.imgPlay.src
+                }
+            }
+                          
+            //###########################################
+            function PlayingSlide(num) {
+                playing=setTimeout('PlayingSlide(i+1);SetSlide(i+1);', playspeed);
+            }             
+             
+            //###########################################
+            function preloadSlide() {
+                for(k=0;k<theimage.length;k++) {
+                    theimage[k][0]=new Image().src=theimage[k][0];
+                }
+            }       
+        </script>        
+    </head>
+    <body>
+        <form name="slideshow">       
+            <table width="100%" height="100%" border="1" cellpadding="2" cellspacing="0">
+            <tr height="40%">
+                <td align="center">
+                <a href="#" onmouseover="this.href=theimage[i][1];return false">
+                <script type="text/javascript">
+                    document.write('<img height="200" name="imgslide" id="imgslide" src="'+theimage[0][0]+'" border="0">')
+                </script>
+                </a>
+                </td>
+            </tr>
+            <tr height="40%">
+                <td align="center"><font face="Arial"><b><div id="slidebox"></div></b></font><br /><font face="Arial"><div id="slidecount"></div></font></td>
+            </tr>
+            <tr height="20%">
+                <td align="center">
+                    <img name="buttonFirst" width="24%" src="buttons/firstNormal.png" onclick="SetSlide(0);" title="First Image" alt="First Image" 
+                         onmouseover="document['buttonFirst'].src='buttons/firstUp.png'"
+                         onmouseup="document['buttonFirst'].src='buttons/firstUp.png'"
+                         onmousedown="document['buttonFirst'].src='buttons/firstDown.png'"
+                         onmouseout="document['buttonFirst'].src='buttons/firstNormal.png'" />
+                    <img name="buttonPrev" width="24%" src="buttons/prevNormal.png" onclick="SetSlide(i-1);" title="Previous Image" alt="Previous Image" 
+                         onmouseover="document['buttonPrev'].src='buttons/prevUp.png'"
+                         onmouseup="document['buttonPrev'].src='buttons/prevUp.png'"
+                         onmousedown="document['buttonPrev'].src='buttons/prevDown.png'"
+                         onmouseout="document['buttonPrev'].src='buttons/prevNormal.png'" />
+                    <img name="buttonNext" width="24%" src="buttons/nextNormal.png" onclick="SetSlide(i+1);" title="Next Image" alt="Next Image" 
+                         onmouseover="document['buttonNext'].src='buttons/nextUp.png'"
+                         onmouseup="document['buttonNext'].src='buttons/nextUp.png'"
+                         onmousedown="document['buttonNext'].src='buttons/nextDown.png'"
+                         onmouseout="document['buttonNext'].src='buttons/nextNormal.png'" />
+                    <img name="buttonLast" width="24%" src="buttons/lastNormal.png" onclick="SetSlide(theimage.length-1);" title="Last Image" alt="Last Image" 
+                         onmouseover="document['buttonLast'].src='buttons/lastUp.png'"
+                         onmouseup="document['buttonLast'].src='buttons/lastUp.png'"
+                         onmousedown="document['buttonLast'].src='buttons/lastDown.png'"
+                         onmouseout="document['buttonLast'].src='buttons/lastNormal.png'" />
+                </td>
+            </tr>
+            </table>      
+        </form>        
+    </body>
+</html>
