@@ -2,7 +2,7 @@
 <widget xmlns       = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
 
-        id          = "com.adobe.woodward.mustangapp"
+        id          = "com.adobe.woodward.restomod"
         version     = "1.0.0">
             
     <!-- App Name -->
@@ -18,7 +18,7 @@
     </author>
 
     <!-- phonegap version -->
-    <preference name="phonegap-version" value="2.3.0" />
+    <!-- <preference name="phonegap-version" value="2.3.0" /> >
             
     <!-- general preferences -->
     <!-- <preference name="orientation" value="landscape" /> -->
@@ -49,6 +49,6 @@
         <feature name="http://api.phonegap.com/1.0/notification"/>
     -->
     
-    <plugin name="SplashScreen" name="CDWSplashScreen" />
+    <!-- <plugin name="SplashScreen" name="CDWSplashScreen" /> -->
 
 </widget>
